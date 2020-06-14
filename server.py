@@ -42,6 +42,7 @@ class Server:
         self.service_type = service_type
         self.work_q = Queue.Queue()
         self.lock = threading.Lock()
+        self.cur_req = None
 
     def attach_socket(self, socket):
         self.socket = socket
@@ -59,7 +60,7 @@ class Server:
             sum = sum + self.cur_req.remaining_work()
         with self.lock:
             queue = self.work_q.queue
-        for req in queue[1:]:
+        for req in queue:
             sum = sum + req.time
         sum = sum + self.get_request_time_by_service_type(new_request)
         return sum
