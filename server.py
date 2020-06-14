@@ -57,10 +57,11 @@ class Server:
     
     def time_to_finish(self, new_request):
         sum = 0
-        if self.cur_req is not None:
-            sum = sum + self.cur_req.remaining_work()
         print >>sys.stderr, 'server %s Acquiring lock in time to finish' %self.id
+        queue = []
         with self.lock:
+            if self.cur_req is not None:
+                sum = sum + self.cur_req.remaining_work()
             queue = self.work_q.queue
         print>>sys.stderr, 'server %s released lock in time to finish' %self.id
         for req in queue:
@@ -93,8 +94,9 @@ class Server:
         return r
 
     def current_request(self, current_request):
-        self.cur_req = current_request
-        self.cur_req.started_at(datetime.datetime.now())
+        with self.lock:
+            self.cur_req = current_request
+            self.cur_req.started_at(datetime.datetime.now())
 
 def manage_connection(server):
     try:
