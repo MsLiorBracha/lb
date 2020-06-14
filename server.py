@@ -4,7 +4,6 @@ import thread
 import datetime
 import Queue
 import threading
-from enum import Enum
 
 def manage_connection(server):
     try:
@@ -31,11 +30,6 @@ def manage_connection(server):
     finally:
         server.close_connection()
 
-class Service(Enum):
-    MUSIC = 1
-    VIDEO = 2
-    PHOTO = 3
-
 class Request:
     def __init__(self, time, service_type, message):
         self.time = time
@@ -43,13 +37,13 @@ class Request:
         self.message = message
 
     def set_time_by_service_type(self, service_type):
-        if service_type == Service.VIDEO:
-            if self.service_type == Service.MUSIC:
+        if service_type == 'V':
+            if self.service_type == 'M':
                 self.time = 2 * self.time
-        elif service_type == Service.MUSIC:
-            if self.service_type == Service.PHOTO:
+        elif service_type == 'M':
+            if self.service_type == 'P':
                 self.time = 2 * self.time
-            if self.service_type == Service.VIDEO:
+            if self.service_type == 'V':
                 self.time = 3 * self.time
     
     def started_at(self, date):
@@ -96,13 +90,13 @@ class Server:
 
     def get_request_time_by_service_type(self, request):
         time = request.time
-        if self.service_type == Service.VIDEO:
-            if request.service_type == Service.MUSIC:
+        if self.service_type == 'V':
+            if request.service_type == 'M':
                 time = 2 * time
-        elif self.service_type == Service.MUSIC:
-            if request.service_type == Service.PHOTO:
+        elif self.service_type == 'M':
+            if request.service_type == 'P':
                 time = 2 * time
-            if self.service_type == Service.VIDEO:
+            if self.service_type == 'V':
                 time = 3 * time
         return time
     
