@@ -108,11 +108,7 @@ def manage_connection(server):
                 print >>sys.stderr, 'connection ended with %s' % server.addr
                 return
             print >>sys.stderr, 'sent "%s" to server %s' % (req.message, server.id)
-            try:
-                server.current_request(req)
-            except:
-                print>>sys.stderr, "Unexpected error when setting current request %s in servre %s: %s" %(req.message, server.id, sys.exc_info()[0])
-            
+            server.current_request(req)            
             data = server.socket.recv(2).decode('utf-8')
             if data == '':
                 print >>sys.stderr, 'connection ended with %s' % server.addr
