@@ -84,9 +84,8 @@ class Server:
         print >>sys.stderr, 'Request %s sent to server %s and will take %s' %(new_request.service_type, self.id, new_request.remaining_work)
 
     def get_first_request(self):
-        with self.lock:
-            r = self.work_q.get(block=True)
-            return r
+        r = self.work_q.get(block=True)
+        return r
 
     def current_request(self, current_request):
         self.cur_req = current_request
