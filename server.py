@@ -4,6 +4,7 @@ import thread
 import datetime
 import Queue
 import threading
+from enum import Enum
 
 def manage_connection(server):
     try:
