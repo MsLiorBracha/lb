@@ -30,7 +30,7 @@ def manage_connection(server):
     finally:
         server.close_connection()
 
-class Service(enum):
+class Service(Enum):
     MUSIC = 1
     VIDEO = 2
     PHOTO = 3
