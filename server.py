@@ -2,7 +2,7 @@ import socket
 import sys
 import thread
 import datetime
-import queue
+import Queue
 import threading
 
 
@@ -40,7 +40,7 @@ class Server:
         self.id = id
         self.addr = addr
         self.service_type = service_type
-        self.work_q = queue.Queue()
+        self.work_q = Queue.Queue()
         self.lock = threading.Lock()
         self.cur_req = None
 
