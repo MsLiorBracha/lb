@@ -58,7 +58,7 @@ for (addr, service) in server_addrs:
 loadBalancer_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 print >>sys.stderr, 'starting up on %s port %s' % listening_addr
 loadBalancer_sock.bind(listening_addr)
-loadBalancer_sock.listen(5)
+loadBalancer_sock.listen(3)
 try:
     while True:
         # Wait for a connection
