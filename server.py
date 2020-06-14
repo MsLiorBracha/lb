@@ -46,7 +46,8 @@ class Server:
 
     def attach_socket(self, socket):
         self.socket = socket
-        self.thread = threading.Thread(target=manage_connection, args=(self,), daemon=True)
+        self.thread = threading.Thread(target=manage_connection, args=(self,))
+        self.thread.setDaemon(True)
         self.thread.start()
         # run thread - send and receive
 
