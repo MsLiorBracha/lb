@@ -85,7 +85,7 @@ class Server:
         with self.lock:
             self.work_q.put(new_request)
         print >>sys.stderr, 'server %s released lock in add new request' %self.id
-        print >>sys.stderr, 'Request %s sent to server %s and will take %s' %(new_request.message, self.id, new_request.remaining_work())
+        print >>sys.stderr, 'Request %s sent to server %s and will take %s' %(new_request.message, self.id, new_request.time)
 
     def get_first_request(self):
         r = self.work_q.get(block=True)
