@@ -58,8 +58,10 @@ class Server:
         sum = 0
         if self.cur_req is not None:
             sum = sum + self.cur_req.remaining_work()
+        print "%s Acquiring lock in time to finish", self.id
         with self.lock:
             queue = self.work_q.queue
+        print "%s released lock in time to finish", self.id
         for req in queue:
             sum = sum + req.time
         sum = sum + self.get_request_time_by_service_type(new_request)
@@ -79,9 +81,11 @@ class Server:
     
     def add_new_request(self, new_request):
         new_request.set_time_by_service_type(self.service_type)
+        print "%s Acquiring lock in add new request", self.id
         with self.lock:
             self.work_q.put(new_request)
-        print >>sys.stderr, 'Request %s sent to server %s and will take %s' %(new_request.service_type, self.id, new_request.remaining_work)
+        print "%s released lock in add new request", self.id
+        print >>sys.stderr, 'Request %s sent to server %s and will take %s' %(new_request.message, self.id, new_request.remaining_work())
 
     def get_first_request(self):
         r = self.work_q.get(block=True)
