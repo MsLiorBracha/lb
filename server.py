@@ -5,30 +5,6 @@ import datetime
 import Queue
 import threading
 
-def manage_connection(server):
-    try:
-        while True:
-            req = server.get_first_request()
-            sent = server.socket.send(req.message)
-            if sent == 0:
-                print >>sys.stderr, 'connection ended with %s' % server.addr
-                return
-            print >>sys.stderr, 'sent "%s" to server %s' % (req.message, server.id)
-            server.current_request(req)
-            data = socket.recv(2).decode('utf-8')
-            if data == '':
-                print >>sys.stderr, 'connection ended with %s' % server.addr
-                return
-            print >>sys.stderr, 'received "%s" from server %s after %s' % (data, server.id, req.remaining_work())
-            req.client_socket.send(data)
-            print >>sys.stderr, 'sent "%s" to client %s and closing the connection' % (req.message, req.client_addr)
-            req.client_socket.close()
-    except:
-        if data == '':
-            print >>sys.stderr, 'connection ended with %s' % server.addr
-            return
-    finally:
-        server.close_connection()
 
 class Request:
     def __init__(self, time, service_type, message):
@@ -114,3 +90,28 @@ class Server:
     def current_request(self, current_request):
         self.cur_req = current_request
         self.cur_req.started_at(datetime.datetime.now)
+
+def manage_connection(server):
+    try:
+        while True:
+            req = server.get_first_request()
+            sent = server.socket.send(req.message)
+            if sent == 0:
+                print >>sys.stderr, 'connection ended with %s' % server.addr
+                return
+            print >>sys.stderr, 'sent "%s" to server %s' % (req.message, server.id)
+            server.current_request(req)
+            data = socket.recv(2).decode('utf-8')
+            if data == '':
+                print >>sys.stderr, 'connection ended with %s' % server.addr
+                return
+            print >>sys.stderr, 'received "%s" from server %s after %s' % (data, server.id, req.remaining_work())
+            req.client_socket.send(data)
+            print >>sys.stderr, 'sent "%s" to client %s and closing the connection' % (req.message, req.client_addr)
+            req.client_socket.close()
+    except:
+        if data == '':
+            print >>sys.stderr, 'connection ended with %s' % server.addr
+            return
+    finally:
+        server.close_connection()
