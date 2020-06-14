@@ -47,7 +47,6 @@ class Server:
     def attach_socket(self, socket):
         self.socket = socket
         self.thread = threading.Thread(target=manage_connection, args=(self,))
-        self.thread.setDaemon(True)
         self.thread.start()
         # run thread - send and receive
 
@@ -101,6 +100,7 @@ def manage_connection(server):
     try:
         while True:
             req = server.get_first_request()
+            print >>sys.stderr, 'sending "%s" to server %s' % (req.message, server.id)
             sent = server.socket.send(req.message)
             if sent == 0:
                 print >>sys.stderr, 'connection ended with %s' % server.addr
