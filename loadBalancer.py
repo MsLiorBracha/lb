@@ -15,7 +15,7 @@ def handle_client(client_sock, client_addr, servers_sockets):
         client_sock.close()
         return
     print >>sys.stderr, 'received "%s" from client %s' % (data, client_addr)
-    new_request = Request(int(data[0]), data[1], data)
+    new_request = Request(int(data[1]), data[0], data)
     new_request.set_client(client_sock, client_addr)
     random_servers = random.sample(servers,  2)
     server1 = servers_sockets[random_servers[0]]
@@ -58,7 +58,7 @@ for (addr, service) in server_addrs:
 loadBalancer_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 print >>sys.stderr, 'starting up on %s port %s' % listening_addr
 loadBalancer_sock.bind(listening_addr)
-loadBalancer_sock.listen(3)
+loadBalancer_sock.listen(5)
 try:
     while True:
         # Wait for a connection
