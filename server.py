@@ -2,7 +2,7 @@ import socket
 import sys
 import thread
 import datetime
-import Queue
+import queue
 import threading
 
 
@@ -40,13 +40,14 @@ class Server:
         self.id = id
         self.addr = addr
         self.service_type = service_type
-        self.work_q = Queue.Queue()
+        self.work_q = queue.Queue()
         self.lock = threading.Lock()
         self.cur_req = None
 
     def attach_socket(self, socket):
         self.socket = socket
-        self.thread = threading.Thread(target=manage_connection, args=(self,))
+        self.thread = threading.Thread(target=manage_connection, args=(self,), daemon=True)
+        self.thread.start()
         # run thread - send and receive
 
     def close_connection(self):
@@ -88,7 +89,7 @@ class Server:
         print >>sys.stderr, 'Request %s sent to server %s and will take %s' %(new_request.message, self.id, new_request.time)
 
     def get_first_request(self):
-        r = self.work_q.get(block=True)
+        r = self.work_q.get()
         return r
 
     def current_request(self, current_request):
