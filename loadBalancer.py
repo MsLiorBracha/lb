@@ -69,5 +69,5 @@ try:
 # close all the connections with the servers and our socket
 finally:
     loadBalancer_sock.close()
-    for server in servers.values:
+    for server in servers_sockets.values:
         server.close_connection()
