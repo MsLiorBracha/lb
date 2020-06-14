@@ -7,7 +7,7 @@ import random
 
 from server import *
 
-servers = range(1, 11)
+servers = range(0, 10)
 
 def handle_client(client_sock, client_addr, servers_sockets):
     data = client_sock.recv(2).decode('utf-8')
