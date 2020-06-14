@@ -26,7 +26,7 @@ class Request:
         self.started_at = date
     
     def remaining_work(self):
-        remain = self.time - (datetime.datetime.now - self.started_at).total_seconds()
+        remain = self.time - (datetime.datetime.now() - self.started_at).total_seconds()
         if remain<0:
             return 0
         return remain
@@ -94,7 +94,7 @@ class Server:
 
     def current_request(self, current_request):
         self.cur_req = current_request
-        self.cur_req.started_at(datetime.datetime.now)
+        self.cur_req.started_at(datetime.datetime.now())
 
 def manage_connection(server):
     try:
