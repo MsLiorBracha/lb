@@ -58,13 +58,11 @@ class Server:
     
     def time_to_finish(self, new_request):
         sum = 0
-        print >>sys.stderr, 'server %s Acquiring lock in time to finish' %self.id
         queue = []
         with self.lock:
             if self.cur_req is not None:
                 sum = sum + self.cur_req.remaining_work()
             queue = self.work_q.queue
-        print>>sys.stderr, 'server %s released lock in time to finish' %self.id
         for req in queue:
             sum = sum + req.time
         sum = sum + self.get_request_time_by_service_type(new_request)
@@ -84,11 +82,9 @@ class Server:
     
     def add_new_request(self, new_request):
         new_request.set_time_by_service_type(self.service_type)
-        #print>>sys.stderr, 'server %s Acquiring lock in add new request' %self.id
         with self.lock:
             self.work_q.put(new_request)
-        #print >>sys.stderr, 'server %s released lock in add new request' %self.id
-        print >>sys.stderr, 'Request %s added to server %s and will take %s. starting new thread' %(new_request.message, self.id, new_request.time)
+        print >>sys.stderr, 'Request %s added to server %s and will take %s' %(new_request.message, self.id, new_request.time)
 
     def get_first_request(self):
         try:
@@ -108,24 +104,23 @@ def manage_connection(server):
             req = server.get_first_request()
             if req is None:
                 continue
-            print >>sys.stderr, 'sending "%s" to server %s' % (req.message, server.id)
+            print >>sys.stderr, 'Sending "%s" to server %s' % (req.message, server.id)
             sent = server.socket.send(req.message)
             if sent == 0:
-                print >>sys.stderr, 'connection ended with %s' % server.addr
+                print >>sys.stderr, 'Connection ended with %s' % server.addr
                 return
-            print >>sys.stderr, 'sent "%s" to server %s' % (req.message, server.id)
             server.current_request(req)            
             data = server.socket.recv(2).decode('utf-8')
             if data == '':
-                print >>sys.stderr, 'connection ended with %s' % server.addr
+                print >>sys.stderr, 'Connection ended with %s' % server.addr
                 return
-            print >>sys.stderr, 'received "%s" from server %s after %s' % (data, server.id, req.remaining_work())
+            print >>sys.stderr, 'Received "%s" from server %s after %s' % (data, server.id, req.remaining_work())
             req.client_socket.send(data)
-            print >>sys.stderr, 'sent "%s" to client %s and closing the connection' % (req.message, req.client_addr)
+            print >>sys.stderr, 'Sent "%s" to client %s and closing the connection' % (req.message, req.client_addr)
             req.client_socket.close()
     except:
         if data == '':
-            print >>sys.stderr, 'connection ended with %s' % server.addr
+            print >>sys.stderr, 'Connection ended with %s' % server.addr
             return
     finally:
         server.close_connection()
