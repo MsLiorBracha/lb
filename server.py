@@ -87,11 +87,11 @@ class Server:
         print >>sys.stderr, 'Request %s added to server %s and will take %s' %(new_request.message, self.id, new_request.time)
 
     def get_first_request(self):
-        try:
-            r = self.work_q.get(False)
-            return r
-        except:
-            return None
+        # try:
+        r = self.work_q.get()
+        #     return r
+        # except:
+        #     return None
 
     def current_request(self, current_request):
         with self.lock:
@@ -114,7 +114,7 @@ def manage_connection(server):
             if data == '':
                 print >>sys.stderr, 'Connection ended with %s' % server.addr
                 return
-            print >>sys.stderr, 'Received "%s" from server %s after %s' % (data, server.id, req.remaining_work())
+            print >>sys.stderr, 'Received "%s" from server %s' % (data, server.id)
             req.client_socket.send(data)
             print >>sys.stderr, 'Sent "%s" to client %s and closing the connection' % (req.message, req.client_addr)
             req.client_socket.close()
