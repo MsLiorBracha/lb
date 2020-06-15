@@ -87,11 +87,11 @@ class Server:
         print >>sys.stderr, 'Request %s added to server %s and will take %s' %(new_request.message, self.id, new_request.time)
 
     def get_first_request(self):
-        # try:
-        r = self.work_q.get()
-        return r
-        # except:
-        #     return None
+        try:
+            r = self.work_q.get(False)
+            return r
+        except:
+            return None
 
     def current_request(self, current_request):
         with self.lock:
@@ -102,8 +102,8 @@ def manage_connection(server):
     try:
         while True:
             req = server.get_first_request()
-            # if req is None:
-            #     continue
+            if req is None:
+                continue
             print >>sys.stderr, 'Sending "%s" to server %s' % (req.message, server.id)
             sent = server.socket.send(req.message)
             if sent == 0:
