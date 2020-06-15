@@ -15,10 +15,10 @@ def choose_best_server(random_servers, server_sockets, new_request, client_addr)
     time1 = server1.time_to_finish(new_request)
     time2 = server2.time_to_finish(new_request)
     if time1<time2:
-        print >>sys.stderr, 'Client %s got servers %s with times %s and chose %s for request' % (client_addr, random_servers, (time1, time2), random_servers[0], new_request.message)
+        print >>sys.stderr, 'Client %s got servers %s with times %s and chose %s for request %s' % (client_addr, random_servers, (time1, time2), random_servers[0], new_request.message)
         server1.add_new_request(new_request)
     else:
-        print >>sys.stderr, 'Client %s got servers %s with times %s and chose %s for request' % (client_addr, random_servers, (time1, time2), random_servers[0], new_request.message)
+        print >>sys.stderr, 'Client %s got servers %s with times %s and chose %s for request %s' % (client_addr, random_servers, (time1, time2), random_servers[0], new_request.message)
         server2.add_new_request(new_request)
 
 def handle_client(client_sock, client_addr, servers_sockets):
