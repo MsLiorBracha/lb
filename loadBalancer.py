@@ -31,7 +31,7 @@ def handle_client(client_sock, client_addr, servers_sockets):
     new_request = Request(int(data[1]), data[0], data)
     new_request.set_client(client_sock, client_addr)
     random_servers = random.sample(servers,  2)
-    choose_best_server(random_servers, server_sockets, new_request, client_addr)
+    choose_best_server(random_servers, servers_sockets, new_request, client_addr)
     # server1 = servers_sockets[random_servers[0]]
     # server2 = servers_sockets[random_servers[1]]
     # time1 = server1.time_to_finish(new_request)
