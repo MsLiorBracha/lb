@@ -46,7 +46,7 @@ class Server:
 
     def attach_socket(self, socket):
         self.socket = socket
-        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.thread = threading.Thread(target=manage_connection, args=(self,))
         self.thread.setDaemon(True)
         self.thread.start()
