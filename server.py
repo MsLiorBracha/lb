@@ -46,6 +46,7 @@ class Server:
 
     def attach_socket(self, socket):
         self.socket = socket
+        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.thread = threading.Thread(target=manage_connection, args=(self,))
         self.thread.setDaemon(True)
         self.thread.start()
@@ -83,11 +84,11 @@ class Server:
     
     def add_new_request(self, new_request):
         new_request.set_time_by_service_type(self.service_type)
-        print>>sys.stderr, 'server %s Acquiring lock in add new request' %self.id
+        #print>>sys.stderr, 'server %s Acquiring lock in add new request' %self.id
         with self.lock:
             self.work_q.put(new_request)
-        print >>sys.stderr, 'server %s released lock in add new request' %self.id
-        print >>sys.stderr, 'Request %s sent to server %s and will take %s' %(new_request.message, self.id, new_request.time)
+        #print >>sys.stderr, 'server %s released lock in add new request' %self.id
+        print >>sys.stderr, 'Request %s added to server %s and will take %s. starting new thread' %(new_request.message, self.id, new_request.time)
 
     def get_first_request(self):
         r = self.work_q.get()
