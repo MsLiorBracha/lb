@@ -89,7 +89,7 @@ class Server:
     def get_first_request(self):
         # try:
         r = self.work_q.get()
-        #     return r
+        return r
         # except:
         #     return None
 
