@@ -102,8 +102,8 @@ def manage_connection(server):
     try:
         while True:
             req = server.get_first_request()
-            if req is None:
-                continue
+            # if req is None:
+            #     continue
             print >>sys.stderr, 'Sending "%s" to server %s' % (req.message, server.id)
             sent = server.socket.send(req.message)
             if sent == 0:
