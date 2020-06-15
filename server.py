@@ -44,8 +44,8 @@ class Server:
         self.lock = threading.Lock()
         self.cur_req = None
 
-    def attach_socket(self, socket):
-        self.socket = socket
+    def attach_socket(self, sock):
+        self.socket = sock
         self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.thread = threading.Thread(target=manage_connection, args=(self,))
         self.thread.setDaemon(True)
