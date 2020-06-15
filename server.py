@@ -7,6 +7,9 @@ import threading
 
 
 class Request:
+    """ Defines a request. 
+    Has the ability to calculate how much time left for a request that already started.
+    Holds the client socket for sending back the answer when done. """
     def __init__(self, time, service_type, message):
         self.time = time
         self.service_type = service_type
@@ -35,7 +38,15 @@ class Request:
         self.client_socket = client_socket
         self.client_addr = client_addr
 
+
 class Server:
+    """
+    Object to manage the servers connections. 
+    Each server holds its socket, queue of requests 
+    and an infinite thread that always tries to pull the 
+    next request from the queue and handle it.
+    """
+
     def __init__(self, id, addr, service_type):
         self.id = id
         self.addr = addr
@@ -57,6 +68,7 @@ class Server:
         self.lock.release()
     
     def time_to_finish(self, new_request):
+        """ How much time left for executing the current request and all the requests in the queue """
         sum = 0
         queue = []
         with self.lock:
