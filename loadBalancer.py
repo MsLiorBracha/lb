@@ -10,6 +10,7 @@ from server import *
 servers = range(0, 10)
 
 def choose_best_server(random_servers, server_sockets, new_request, client_addr):
+    """ Out of 2 random servers, which is the best choice? """
     server1 = servers_sockets[random_servers[0]]
     server2 = servers_sockets[random_servers[1]]
     time1 = server1.time_to_finish(new_request)
@@ -32,16 +33,6 @@ def handle_client(client_sock, client_addr, servers_sockets):
     new_request.set_client(client_sock, client_addr)
     random_servers = random.sample(servers,  2)
     choose_best_server(random_servers, servers_sockets, new_request, client_addr)
-    # server1 = servers_sockets[random_servers[0]]
-    # server2 = servers_sockets[random_servers[1]]
-    # time1 = server1.time_to_finish(new_request)
-    # time2 = server2.time_to_finish(new_request)
-    # if time1<time2:
-    #     print >>sys.stderr, 'requested "%s" from server %s' % (data, random_servers[0])
-    #     server1.add_new_request(new_request)
-    # else:
-    #     print >>sys.stderr, 'requested "%s" from server %s' % (data, random_servers[1])
-    #     server2.add_new_request(new_request)
     
 
 server_addrs = [(('192.168.0.100', 80), 'V'), \
